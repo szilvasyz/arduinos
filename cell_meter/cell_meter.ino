@@ -65,24 +65,25 @@ void loop() {
   v2 = hi * VREF / 1023.0;
   i2 = (hi - lo) * VREF / 1023.0 / R2;
   if (i2 < 0.0) i2 = 0.0;
-  
-  
-  
+
+  mil = millis();
+
+    
   if (v1 < VMIN) c1_run = false;
   if (v2 < VMIN) c2_run = false;
 
   if (analogRead(KBD) < 800) {
     c1_run = true;
     c1_cap = 0.0;
-    c1_mil = millis();
+    c1_mil = mil;
     c2_run = true;
     c2_cap = 0.0;
-    c2_mil = millis();
+    c2_mil = mil;
   }
 
   if (c1_run) {
     digitalWrite(C1_ON,HIGH);
-    mil = millis();
+    
     c1_cap += (i1 * (mil - c1_mil)) / 3600.0;
     c1_mil = mil;
   }
@@ -92,7 +93,6 @@ void loop() {
 
   if (c2_run) {
     digitalWrite(C2_ON,HIGH);
-    mil = millis();
     c2_cap += (i2 * (mil - c2_mil)) / 3600.0;
     c2_mil = mil;
   }
