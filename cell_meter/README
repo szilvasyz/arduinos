@@ -1,1 +1,3 @@
 Battery cell capacity meter.
+
+Code is ready for Arduino Mega2560 and Arduino Pro Mini. On Arduino Mega2560 buttons are handled as analog input, prototype was developed with a DFRobot LCD/button shield. Pinouts are readable from "hardware.h" file.

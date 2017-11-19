@@ -1,54 +1,5 @@
 #include <LiquidCrystal.h>
-
-
-// keyboard connected to analog pin
-#define KBD A0
-
-// discharge control outputs
-#define C1_DC 20
-#define C2_DC 21
-
-// charge control outputs (negated!)
-#define C1_CH 18
-#define C2_CH 19
-
-// lower point of discharging resistors
-#define C1_LO A8
-#define C2_LO A9
-
-// upper point of discharging restistors
-#define C1_HI A10
-#define C2_HI A11
-
-// power point of charging resistors
-#define C1_PW A12
-#define C2_PW A13
-
-// values of discharging resistors
-#define C1_DCR 10.0
-#define C2_DCR 10.0
-
-// values of charging resistors
-#define C1_CHR 10.0
-#define C2_CHR 10.0
-
-// Vref = supply voltage, Vmin is the discharging voltage limit, Imin is charging current limit
-#define VREF 5.00
-#define VMIN 2.70
-#define IMIN 0.10
-
-// resistors of voltage divider on charging power line
-#define PW_RU 39000.0
-#define PW_RL 33000.0
-
-// initialize the library by associating any needed LCD interface pin
-// with the arduino pin number it is connected to
-#define RS 8
-#define EN 9
-#define DB4 4
-#define DB5 5
-#define DB6 6
-#define DB7 7
+#include "hardware.h"
 
 LiquidCrystal lcd(RS, EN, DB4, DB5, DB6, DB7);
 
@@ -69,6 +20,8 @@ void setup() {
   pinMode(C2_HI,INPUT);
   pinMode(C1_PW,INPUT);
   pinMode(C2_PW,INPUT);
+
+  KBD_INIT();
   
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -193,14 +146,14 @@ void loop() {
   }
 
 
-  if (( k = analogRead(KBD)) < 800) {
+  if ( KBD_READ() != 0 ) {
     c1_cap = 0.0;
     c2_cap = 0.0;
 
     c1_mil = mil;
     c2_mil = mil;
 
-    if (k<500) {
+    if ( KBD_READ() == 1 ) {
       c1_dc = true;
       c2_dc = true;
       c1_ch = false;
